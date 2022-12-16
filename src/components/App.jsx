@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { Report } from 'notiflix/build/notiflix-report-aio';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyleComponent } from 'styles/GlobalStyles.styled';
 import { Section } from './Section/Section.styled';
 import { Container } from './Container/Container.styled';
+import { Title } from 'styles/Title.styled';
+import { SubTitle } from 'styles/SubTitle.styled';
 import Filter from './Filter/Filter';
-import Form from './Form/Form';
+import ContactForm from './Form/ContactForm';
 import ContactsList from './ContactsList/ContactsList';
 import { theme } from 'styles/theme';
 
@@ -25,7 +28,7 @@ export default class App extends Component {
         contact => contact.name.toLowerCase() === name.toLowerCase()
       )
     ) {
-      alert('alert');
+      Report.failure(`Oooops...`, `${name} is already in contacts`, 'Okay');
       return;
     }
 
@@ -52,24 +55,31 @@ export default class App extends Component {
   };
 
   render() {
+    const { contacts } = this.state;
     const filteredContacts = this.filterContacts();
 
     return (
       <ThemeProvider theme={theme}>
         <Section>
           <Container>
-            <h1>Phonebook</h1>
-            <Form addNewContact={this.addNewContact} />
+            <Title>Phonebook</Title>
+            <ContactForm addNewContact={this.addNewContact} />
           </Container>
         </Section>
         <Section>
           <Container>
-            <Filter onFilterInputChange={this.onFilterInputChange} />
-            <h2>Phonebook list</h2>
-            <ContactsList
-              contacts={filteredContacts}
-              deleteContact={this.deleteContact}
-            />
+            {contacts.length > 0 ? (
+              <>
+                <Filter onFilterInputChange={this.onFilterInputChange} />
+                <SubTitle>Contacts</SubTitle>
+                <ContactsList
+                  contacts={filteredContacts}
+                  deleteContact={this.deleteContact}
+                />
+              </>
+            ) : (
+              <SubTitle>Contacts list is empty</SubTitle>
+            )}
           </Container>
         </Section>
         <GlobalStyleComponent />

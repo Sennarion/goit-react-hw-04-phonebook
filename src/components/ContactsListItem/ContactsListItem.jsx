@@ -20,6 +20,11 @@ function ContactsListItem({ id, name, number, deleteContact }) {
   );
 }
 
-ContactsListItem.propTypes = {};
+ContactsListItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  number: PropTypes.string.isRequired,
+  deleteContact: PropTypes.func.isRequired,
+};
 
 export default ContactsListItem;

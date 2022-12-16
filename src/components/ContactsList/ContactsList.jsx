@@ -18,6 +18,8 @@ function ContactsList({ contacts, deleteContact }) {
   );
 }
 
-ContactsList.propTypes = {};
+ContactsList.propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+};
 
 export default ContactsList;

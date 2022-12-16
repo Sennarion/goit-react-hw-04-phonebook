@@ -12,6 +12,7 @@ export const theme = Object.freeze({
     small: '14px',
     medium: '18px',
     large: '22px',
+    max: '28px',
   },
   spacing: value => `${4 * value}px`,
   shadows: {
@@ -24,9 +25,9 @@ export const theme = Object.freeze({
   },
 
   media: {
-    mobile: '@media screen and (min-width: 480px)',
-    tablet: ' @media screen and (min-width: 768px)',
-    desktop: '@media screen and (min-width: 1200px)',
+    mobile: '480px',
+    tablet: '768px',
+    desktop: '1200px',
   },
 
 });
