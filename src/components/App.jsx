@@ -1,33 +1,36 @@
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
-import Input from './Input/Input';
+import { Section } from './Section/Section.styled';
+import { Container } from './Container/Container.styled';
+import Form from './Form/Form';
 import ContactsList from './ContactsList/ContactsList';
 
 export default class App extends Component {
   state = {
     contacts: [],
-    name: '',
-    number: '',
   };
 
-  onFormSubmit = e => {
-    e.preventDefault();
-    const id = nanoid();
-    const name = e.target.elements.name.value;
-    const number = e.target.elements.number.value;
+  addNewContact = ({ id, name, number }) => {
     this.setState(prevState => ({
       contacts: [...prevState.contacts, { id, name, number }],
     }));
-    e.target.reset();
   };
 
   render() {
     const { contacts } = this.state;
     return (
       <>
-        <h1>Phonebook</h1>
-        <Input onFormSubmit={this.onFormSubmit} />
-        <ContactsList contacts={contacts} />
+        <Section>
+          <Container>
+            <h1>Phonebook</h1>
+            <Form addNewContact={this.addNewContact} />
+          </Container>
+        </Section>
+        <Section>
+          <Container>
+            <h2>Phonebook list</h2>
+            <ContactsList contacts={contacts} />
+          </Container>
+        </Section>
       </>
     );
   }
