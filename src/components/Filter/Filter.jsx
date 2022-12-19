@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { FilterWrapper } from './Filter.styled';
-import { SubTitle } from 'styles/SubTitle.styled';
+import { SubTitle } from 'components/SubTitle/SubTitle.styled';
 
-function Filter({ onFilterInputChange }) {
+function Filter({ currentFilter, onFilterInputChange }) {
   return (
     <FilterWrapper>
       <SubTitle>Find contacts by name</SubTitle>
-      <input type="text" onChange={e => onFilterInputChange(e.target.value)} />
+      <input type="text" value={currentFilter} onChange={onFilterInputChange} />
     </FilterWrapper>
   );
 }

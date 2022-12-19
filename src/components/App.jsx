@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import { Report } from 'notiflix/build/notiflix-report-aio';
+import { nanoid } from 'nanoid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyleComponent } from 'styles/GlobalStyles.styled';
-import { Section } from './Section/Section.styled';
-import { Container } from './Container/Container.styled';
-import { Title } from 'styles/Title.styled';
-import { SubTitle } from 'styles/SubTitle.styled';
-import Filter from './Filter/Filter';
-import ContactForm from './Form/ContactForm';
-import ContactsList from './ContactsList/ContactsList';
 import { theme } from 'styles/theme';
+import {
+  Form,
+  Filter,
+  ContactsList,
+  Container,
+  Section,
+  Title,
+  SubTitle,
+} from './';
 
 export default class App extends Component {
   state = {
@@ -22,25 +26,25 @@ export default class App extends Component {
     filter: '',
   };
 
-  addNewContact = ({ id, name, number }) => {
+  addNewContact = newContact => {
     if (
       this.state.contacts.some(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
+        contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
       )
     ) {
-      Report.failure(`Oooops...`, `${name} is already in contacts`, 'Okay');
+      toast.error(`${newContact.name} is already in contacts`);
       return;
     }
 
     this.setState(prevState => ({
-      contacts: [{ id, name, number }, ...prevState.contacts],
+      contacts: [{ id: nanoid(), ...newContact }, ...prevState.contacts],
     }));
   };
 
   filterContacts = () => {
     const { contacts, filter } = this.state;
     return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
+      contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim())
     );
   };
 
@@ -50,12 +54,13 @@ export default class App extends Component {
     }));
   };
 
-  onFilterInputChange = filter => {
+  onFilterInputChange = e => {
+    const filter = e.target.value;
     this.setState({ filter });
   };
 
   render() {
-    const { contacts } = this.state;
+    const { filter, contacts } = this.state;
     const filteredContacts = this.filterContacts();
 
     return (
@@ -63,14 +68,17 @@ export default class App extends Component {
         <Section>
           <Container>
             <Title>Phonebook</Title>
-            <ContactForm addNewContact={this.addNewContact} />
+            <Form addNewContact={this.addNewContact} />
           </Container>
         </Section>
         <Section>
           <Container>
             {contacts.length > 0 ? (
               <>
-                <Filter onFilterInputChange={this.onFilterInputChange} />
+                <Filter
+                  currentFilter={filter}
+                  onFilterInputChange={this.onFilterInputChange}
+                />
                 <SubTitle>Contacts</SubTitle>
                 <ContactsList
                   contacts={filteredContacts}
@@ -83,6 +91,7 @@ export default class App extends Component {
           </Container>
         </Section>
         <GlobalStyleComponent />
+        <ToastContainer />
       </ThemeProvider>
     );
   }

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { nanoid } from 'nanoid';
-import { Label } from './ContactForm.styled';
+import { Label } from './Form.styled';
 
 export default class Form extends Component {
   static propTypes = {
@@ -21,10 +20,8 @@ export default class Form extends Component {
 
   onFormSubmit = e => {
     e.preventDefault();
-    this.props.addNewContact({
-      ...this.state,
-      id: nanoid(),
-    });
+    this.props.addNewContact(this.state);
+
     this.setState({
       name: '',
       number: '',
