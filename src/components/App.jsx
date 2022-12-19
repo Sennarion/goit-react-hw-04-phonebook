@@ -15,6 +15,8 @@ import {
   SubTitle,
 } from './';
 
+const STORAGE_KEY = 'contacts';
+
 export default class App extends Component {
   state = {
     contacts: [
@@ -25,6 +27,20 @@ export default class App extends Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    const storageData = localStorage.getItem(STORAGE_KEY);
+    if (storageData) {
+      this.setState(JSON.parse(storageData));
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts === prevState.contacts) {
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
+  }
 
   addNewContact = newContact => {
     if (
