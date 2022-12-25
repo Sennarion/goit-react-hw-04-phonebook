@@ -1,66 +1,65 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { Label } from './Form.styled';
 
-export default class Form extends Component {
-  static propTypes = {
-    addNewContact: PropTypes.func.isRequired,
+export default function Form({ addNewContact }) {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
+  const onInputChange = e => {
+    switch (e.target.name) {
+      case 'name':
+        setName(e.target.value);
+        break;
+      case 'number':
+        setNumber(e.target.value);
+        break;
+      default:
+        return;
+    }
   };
 
-  state = {
-    name: '',
-    number: '',
-  };
-
-  onInputChange = ({ target: { name, value } }) => {
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  onFormSubmit = e => {
+  const onFormSubmit = e => {
     e.preventDefault();
-    this.props.addNewContact(this.state);
+    addNewContact({ name, number });
 
-    this.setState({
-      name: '',
-      number: '',
-    });
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    const { name, number } = this.state;
+  return (
+    <form onSubmit={onFormSubmit}>
+      <Label>
+        Name
+        <input
+          type="text"
+          name="name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+          required
+          onChange={onInputChange}
+          value={name}
+        />
+      </Label>
 
-    return (
-      <form onSubmit={this.onFormSubmit}>
-        <Label>
-          Name
-          <input
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-            onChange={this.onInputChange}
-            value={name}
-          />
-        </Label>
+      <Label>
+        Number
+        <input
+          type="tel"
+          name="number"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+          onChange={onInputChange}
+          value={number}
+        />
+      </Label>
 
-        <Label>
-          Number
-          <input
-            type="tel"
-            name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-            onChange={this.onInputChange}
-            value={number}
-          />
-        </Label>
-
-        <button type="submit">Add contact</button>
-      </form>
-    );
-  }
+      <button type="submit">Add contact</button>
+    </form>
+  );
 }
+
+Form.propTypes = {
+  addNewContact: PropTypes.func.isRequired,
+};

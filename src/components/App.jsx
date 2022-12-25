@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -17,34 +17,25 @@ import {
 
 const STORAGE_KEY = 'contacts';
 
-export default class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '+459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '+443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '+645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '+227-91-26' },
-    ],
-    filter: '',
-  };
+export default function App() {
+  const [contacts, setContacts] = useState(
+    () =>
+      JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? [
+        { id: 'id-1', name: 'Rosie Simpson', number: '+459-12-56' },
+        { id: 'id-2', name: 'Hermione Kline', number: '+443-89-12' },
+        { id: 'id-3', name: 'Eden Clements', number: '+645-17-79' },
+        { id: 'id-4', name: 'Annie Copeland', number: '+227-91-26' },
+      ]
+  );
+  const [filter, setFilter] = useState('');
 
-  componentDidMount() {
-    const storageData = localStorage.getItem(STORAGE_KEY);
-    if (storageData) {
-      this.setState(JSON.parse(storageData));
-    }
-  }
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
+  }, [contacts]);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts === prevState.contacts) {
-      return;
-    }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.state));
-  }
-
-  addNewContact = newContact => {
+  const addNewContact = newContact => {
     if (
-      this.state.contacts.some(
+      contacts.some(
         contact => contact.name.toLowerCase() === newContact.name.toLowerCase()
       )
     ) {
@@ -52,63 +43,52 @@ export default class App extends Component {
       return;
     }
 
-    this.setState(prevState => ({
-      contacts: [{ id: nanoid(), ...newContact }, ...prevState.contacts],
-    }));
+    setContacts(prev => [{ id: nanoid(), ...newContact }, ...prev]);
   };
 
-  filterContacts = () => {
-    const { contacts, filter } = this.state;
+  const filterContacts = () => {
     return contacts.filter(contact =>
       contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim())
     );
   };
 
-  deleteContact = id => {
-    this.setState(({ contacts }) => ({
-      contacts: contacts.filter(contact => contact.id !== id),
-    }));
+  const deleteContact = id => {
+    setContacts(prev => prev.filter(contact => contact.id !== id));
   };
 
-  onFilterInputChange = e => {
-    const filter = e.target.value;
-    this.setState({ filter });
+  const onFilterInputChange = e => {
+    setFilter(e.target.value);
   };
 
-  render() {
-    const { filter, contacts } = this.state;
-    const filteredContacts = this.filterContacts();
-
-    return (
-      <ThemeProvider theme={theme}>
-        <Section>
-          <Container>
-            <Title>Phonebook</Title>
-            <Form addNewContact={this.addNewContact} />
-          </Container>
-        </Section>
-        <Section>
-          <Container>
-            {contacts.length > 0 ? (
-              <>
-                <Filter
-                  currentFilter={filter}
-                  onFilterInputChange={this.onFilterInputChange}
-                />
-                <SubTitle>Contacts</SubTitle>
-                <ContactsList
-                  contacts={filteredContacts}
-                  deleteContact={this.deleteContact}
-                />
-              </>
-            ) : (
-              <SubTitle>Contacts list is empty</SubTitle>
-            )}
-          </Container>
-        </Section>
-        <GlobalStyleComponent />
-        <ToastContainer />
-      </ThemeProvider>
-    );
-  }
+  return (
+    <ThemeProvider theme={theme}>
+      <Section>
+        <Container>
+          <Title>Phonebook</Title>
+          <Form addNewContact={addNewContact} />
+        </Container>
+      </Section>
+      <Section>
+        <Container>
+          {contacts.length > 0 ? (
+            <>
+              <Filter
+                currentFilter={filter}
+                onFilterInputChange={onFilterInputChange}
+              />
+              <SubTitle>Contacts</SubTitle>
+              <ContactsList
+                contacts={filterContacts()}
+                deleteContact={deleteContact}
+              />
+            </>
+          ) : (
+            <SubTitle>Contacts list is empty</SubTitle>
+          )}
+        </Container>
+      </Section>
+      <GlobalStyleComponent />
+      <ToastContainer />
+    </ThemeProvider>
+  );
 }
