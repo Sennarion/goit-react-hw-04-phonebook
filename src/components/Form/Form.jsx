@@ -1,10 +1,17 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { Label } from './Form.styled';
+import { useState, useRef, useEffect } from 'react';
+import { StyledForm, Label, Input, LabelName } from './Form.styled';
+import { Button } from 'components';
 
-export default function Form({ addNewContact }) {
+export default function Form({ addNewContact, setIsModalOpen }) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const nameInputRef = useRef(null);
+
+  useEffect(() => {
+    nameInputRef.current.focus();
+  }, []);
 
   const onInputChange = e => {
     switch (e.target.name) {
@@ -25,13 +32,16 @@ export default function Form({ addNewContact }) {
 
     setName('');
     setNumber('');
+    setIsModalOpen(false);
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
+    <StyledForm onSubmit={onFormSubmit}>
       <Label>
-        Name
-        <input
+        <LabelName>Name</LabelName>
+
+        <Input
+          ref={nameInputRef}
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -43,8 +53,8 @@ export default function Form({ addNewContact }) {
       </Label>
 
       <Label>
-        Number
-        <input
+        <LabelName>Number</LabelName>
+        <Input
           type="tel"
           name="number"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
@@ -54,9 +64,8 @@ export default function Form({ addNewContact }) {
           value={number}
         />
       </Label>
-
-      <button type="submit">Add contact</button>
-    </form>
+      <Button type="submit">Add contact</Button>
+    </StyledForm>
   );
 }
 

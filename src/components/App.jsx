@@ -6,13 +6,12 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalStyleComponent } from 'styles/GlobalStyles.styled';
 import { theme } from 'styles/theme';
 import {
-  Form,
   Filter,
   ContactsList,
   Container,
   Section,
-  Title,
-  SubTitle,
+  Header,
+  EmptyList,
 } from './';
 
 const STORAGE_KEY = 'contacts';
@@ -25,9 +24,12 @@ export default function App() {
         { id: 'id-2', name: 'Hermione Kline', number: '+443-89-12' },
         { id: 'id-3', name: 'Eden Clements', number: '+645-17-79' },
         { id: 'id-4', name: 'Annie Copeland', number: '+227-91-26' },
+        { id: 'id-5', name: 'Dien Norris', number: '+233-65-21' },
+        { id: 'id-6', name: 'Tomas Smith', number: '+437-12-09' },
       ]
   );
   const [filter, setFilter] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
@@ -46,12 +48,6 @@ export default function App() {
     setContacts(prev => [{ id: nanoid(), ...newContact }, ...prev]);
   };
 
-  const filterContacts = () => {
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim())
-    );
-  };
-
   const deleteContact = id => {
     setContacts(prev => prev.filter(contact => contact.id !== id));
   };
@@ -60,33 +56,45 @@ export default function App() {
     setFilter(e.target.value);
   };
 
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().trim().includes(filter.toLowerCase().trim())
+  );
+
   return (
     <ThemeProvider theme={theme}>
+      <Header
+        addNewContact={addNewContact}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
+
       <Section>
         <Container>
-          <Title>Phonebook</Title>
-          <Form addNewContact={addNewContact} />
-        </Container>
-      </Section>
-      <Section>
-        <Container>
-          {contacts.length > 0 ? (
-            <>
-              <Filter
-                currentFilter={filter}
-                onFilterInputChange={onFilterInputChange}
-              />
-              <SubTitle>Contacts</SubTitle>
-              <ContactsList
-                contacts={filterContacts()}
-                deleteContact={deleteContact}
-              />
-            </>
-          ) : (
-            <SubTitle>Contacts list is empty</SubTitle>
+          {contacts.length > 0 && (
+            <Filter
+              currentFilter={filter}
+              onFilterInputChange={onFilterInputChange}
+            />
+          )}
+
+          {filteredContacts.length > 0 && (
+            <ContactsList
+              contacts={filteredContacts}
+              deleteContact={deleteContact}
+            />
+          )}
+
+          {contacts.length === 0 && (
+            <EmptyList setIsModalOpen={setIsModalOpen} />
+          )}
+          {contacts.length > 0 && filteredContacts.length === 0 && (
+            <p>
+              There are no contacts with the name <strong>{filter}</strong>
+            </p>
           )}
         </Container>
       </Section>
+
       <GlobalStyleComponent />
       <ToastContainer />
     </ThemeProvider>

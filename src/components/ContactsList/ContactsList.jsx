@@ -1,20 +1,23 @@
 import PropTypes from 'prop-types';
-import { ContactsListItem } from 'components';
+import { ContactsListItem, SubTitle } from 'components';
 import { List } from './ContactsList.styled';
 
 function ContactsList({ contacts, deleteContact }) {
   return (
-    <List>
-      {contacts.map(({ id, name, number }) => (
-        <ContactsListItem
-          key={id}
-          id={id}
-          name={name}
-          number={number}
-          deleteContact={deleteContact}
-        />
-      ))}
-    </List>
+    <>
+      <SubTitle>Contacts</SubTitle>
+      <List>
+        {contacts.map(({ id, name, number }) => (
+          <ContactsListItem
+            key={id}
+            id={id}
+            name={name}
+            number={number}
+            deleteContact={deleteContact}
+          />
+        ))}
+      </List>
+    </>
   );
 }
 

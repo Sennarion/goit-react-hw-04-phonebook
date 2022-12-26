@@ -1,6 +1,11 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyleComponent = createGlobalStyle`
+  body {
+    font-family: 'Montserrat', sans-serif;
+    color: ${({ theme }) => theme.colors.dark};
+  }
+
   img {
     display: block;
     max-width: 100%;

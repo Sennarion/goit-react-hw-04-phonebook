@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { ListItem } from './ContactsListItem.styled';
-import { Text } from './ContactsListItem.styled';
+import { ListItem, Text } from './ContactsListItem.styled';
+import { Button } from 'components';
 import { theme } from '../../styles/theme';
 import { FaUserAlt, FaPhoneAlt } from 'react-icons/fa';
 
@@ -15,7 +15,9 @@ function ContactsListItem({ id, name, number, deleteContact }) {
         <FaPhoneAlt color={theme.colors.accent} size={theme.spacing(8)} />
         {number}
       </Text>
-      <button onClick={() => deleteContact(id)}>Delete</button>
+      <Button type="button" onClick={() => deleteContact(id)}>
+        Delete contact
+      </Button>
     </ListItem>
   );
 }

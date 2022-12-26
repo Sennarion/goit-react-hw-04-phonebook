@@ -29,5 +29,4 @@ export const theme = Object.freeze({
     tablet: '768px',
     desktop: '1200px',
   },
-
 });
