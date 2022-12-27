@@ -2,6 +2,7 @@ export { default as ContactsList } from './ContactsList/ContactsList';
 export { default as ContactsListItem } from './ContactsListItem/ContactsListItem';
 export { default as Filter } from './Filter/Filter';
 export { default as Form } from './Form/Form';
+export { default as UpdateForm } from './UpdateForm/UpdateForm';
 export { default as Header } from './Header/Header';
 export { default as Button } from './Button/Button';
 export { default as Modal } from './Modal/Modal';

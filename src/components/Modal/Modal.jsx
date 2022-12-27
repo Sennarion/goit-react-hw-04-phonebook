@@ -2,17 +2,17 @@ import PropTypes from 'prop-types';
 import { Backdrop, ModalWindow } from './Modal.styled';
 import { useEffect } from 'react';
 
-function Modal({ children, setIsModalOpen }) {
+function Modal({ children, toggleModal }) {
   const onBackdropClick = e => {
     if (e.target === e.currentTarget) {
-      setIsModalOpen(false);
+      toggleModal(null);
     }
   };
 
   useEffect(() => {
     const onPressEsc = e => {
       if (e.code === 'Escape') {
-        setIsModalOpen(false);
+        toggleModal(null);
       }
     };
 
@@ -21,7 +21,7 @@ function Modal({ children, setIsModalOpen }) {
     return () => {
       window.removeEventListener('keydown', onPressEsc);
     };
-  }, [setIsModalOpen]);
+  }, [toggleModal]);
 
   return (
     <Backdrop onClick={onBackdropClick}>
@@ -32,7 +32,7 @@ function Modal({ children, setIsModalOpen }) {
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
-  setIsModalOpen: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,
 };
 
 export default Modal;

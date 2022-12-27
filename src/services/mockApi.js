@@ -16,10 +16,16 @@ async function addContact(contact) {
   return response.data;
 }
 
+async function updateContact(contact) {
+  const response = await axios.put(`/${contact.id}`, contact);
+  return response.data;
+}
+
 const api = {
   getContacts,
   deleteContact,
   addContact,
+  updateContact,
 };
 
 export default api;

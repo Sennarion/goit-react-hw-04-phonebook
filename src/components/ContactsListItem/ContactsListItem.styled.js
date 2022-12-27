@@ -17,3 +17,9 @@ export const Text = styled.p`
   padding: ${({ theme }) => theme.spacing(4)};
   border-radius: ${({ theme }) => theme.spacing(1)};
 `;
+
+export const Buttons = styled.div`
+  display: flex;
+  justify-content: space-around;
+  gap: ${({ theme }) => theme.spacing(2)};
+`;

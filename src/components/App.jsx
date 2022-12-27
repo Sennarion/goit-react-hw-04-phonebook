@@ -12,6 +12,9 @@ import {
   Header,
   EmptyList,
   Loader,
+  Modal,
+  Form,
+  UpdateForm,
 } from './';
 import api from 'services/mockApi';
 
@@ -19,6 +22,7 @@ export default function App() {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userToUpdate, setUserToUpdate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -27,7 +31,7 @@ export default function App() {
       .getContacts()
       .then(data => setContacts(data))
       .catch(error =>
-        toast.error(`Wooops... Something went wrong. ${error.message}`)
+        toast.error(`Whooops... Something went wrong. ${error.message}`)
       )
       .finally(() => setIsLoading(false));
   }, []);
@@ -49,7 +53,7 @@ export default function App() {
         setContacts(prev => [...prev, newContact]);
       })
       .catch(error =>
-        toast.error(`Wooops... Something went wrong. ${error.message}`)
+        toast.error(`Whooops... Something went wrong. ${error.message}`)
       )
       .finally(() => setIsLoading(false));
   };
@@ -64,9 +68,31 @@ export default function App() {
         );
       })
       .catch(error =>
-        toast.error(`Wooops... Something went wrong. ${error.message}`)
+        toast.error(`Whooops... Something went wrong. ${error.message}`)
       )
       .finally(() => setIsLoading(false));
+  };
+
+  const updateContact = contact => {
+    setIsLoading(true);
+    api
+      .updateContact(contact)
+      .then(updatedContact => {
+        setContacts(prev =>
+          prev.map(contact =>
+            contact.id === updatedContact.id ? updatedContact : contact
+          )
+        );
+      })
+      .catch(error =>
+        toast.error(`Whooops... Something went wrong. ${error.message}`)
+      )
+      .finally(() => setIsLoading(false));
+  };
+
+  const showUpdateForm = id => {
+    const user = contacts.find(contact => contact.id === id);
+    setUserToUpdate(user);
   };
 
   const onFilterInputChange = e => {
@@ -100,6 +126,7 @@ export default function App() {
             <ContactsList
               contacts={filteredContacts}
               deleteContact={deleteContact}
+              showUpdateForm={showUpdateForm}
             />
           )}
 
@@ -114,6 +141,22 @@ export default function App() {
           )}
         </Container>
       </Section>
+
+      {isModalOpen && (
+        <Modal toggleModal={setIsModalOpen}>
+          <Form addNewContact={addNewContact} setIsModalOpen={setIsModalOpen} />
+        </Modal>
+      )}
+
+      {userToUpdate && (
+        <Modal toggleModal={setUserToUpdate}>
+          <UpdateForm
+            updateContact={updateContact}
+            setUserToUpdate={setUserToUpdate}
+            userToUpdate={userToUpdate}
+          />
+        </Modal>
+      )}
 
       {isLoading && <Loader />}
       <GlobalStyleComponent />

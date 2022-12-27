@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import { StyledHeader, HeaderContent, Logo } from './Header.styled';
-import { Container, Form, Button, Modal } from '../';
+import { Container, Button } from '../';
 import { FaUserPlus } from 'react-icons/fa';
 import { theme } from '../../styles/theme';
 
-function Header({ addNewContact, isModalOpen, setIsModalOpen }) {
+function Header({ setIsModalOpen }) {
   return (
     <StyledHeader>
       <Container>
@@ -13,18 +14,14 @@ function Header({ addNewContact, isModalOpen, setIsModalOpen }) {
             <FaUserPlus size={theme.spacing(8)} />
             Add new contact
           </Button>
-          {isModalOpen && (
-            <Modal setIsModalOpen={setIsModalOpen}>
-              <Form
-                addNewContact={addNewContact}
-                setIsModalOpen={setIsModalOpen}
-              />
-            </Modal>
-          )}
         </HeaderContent>
       </Container>
     </StyledHeader>
   );
 }
+
+Header.propTypes = {
+  setIsModalOpen: PropTypes.func.isRequired,
+};
 
 export default Header;

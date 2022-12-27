@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { ContactsListItem, SubTitle } from 'components';
 import { List } from './ContactsList.styled';
 
-function ContactsList({ contacts, deleteContact }) {
+function ContactsList({ contacts, deleteContact, showUpdateForm }) {
   return (
     <>
       <SubTitle>Contacts</SubTitle>
@@ -14,6 +14,7 @@ function ContactsList({ contacts, deleteContact }) {
             name={name}
             number={number}
             deleteContact={deleteContact}
+            showUpdateForm={showUpdateForm}
           />
         ))}
       </List>
@@ -23,6 +24,8 @@ function ContactsList({ contacts, deleteContact }) {
 
 ContactsList.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+  deleteContact: PropTypes.func.isRequired,
+  showUpdateForm: PropTypes.func.isRequired,
 };
 
 export default ContactsList;

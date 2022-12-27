@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
 import { useState, useRef, useEffect } from 'react';
-import { StyledForm, Label, Input, LabelName } from './Form.styled';
+import { StyledForm, Label, Input, LabelName } from './UpdateForm.styled';
 import { Button } from 'components';
 
-export default function Form({ addNewContact, setIsModalOpen }) {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export default function UpdateForm({
+  updateContact,
+  setUserToUpdate,
+  userToUpdate,
+}) {
+  const [name, setName] = useState(userToUpdate.name);
+  const [number, setNumber] = useState(userToUpdate.number);
 
   const nameInputRef = useRef(null);
 
@@ -30,11 +34,11 @@ export default function Form({ addNewContact, setIsModalOpen }) {
 
   const onFormSubmit = e => {
     e.preventDefault();
-    addNewContact({ name, number });
+    updateContact({ id: userToUpdate.id, name, number });
 
     setName('');
     setNumber('');
-    setIsModalOpen(false);
+    setUserToUpdate(null);
   };
 
   return (
@@ -66,12 +70,17 @@ export default function Form({ addNewContact, setIsModalOpen }) {
           value={number}
         />
       </Label>
-      <Button type="submit">Add contact</Button>
+      <Button type="submit">Update contact</Button>
     </StyledForm>
   );
 }
 
-Form.propTypes = {
-  addNewContact: PropTypes.func.isRequired,
-  setIsModalOpen: PropTypes.func.isRequired,
+UpdateForm.propTypes = {
+  updateContact: PropTypes.func.isRequired,
+  setUserToUpdate: PropTypes.func.isRequired,
+  userToUpdate: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }).isRequired,
 };

@@ -12,6 +12,7 @@ function Filter({ currentFilter, onFilterInputChange }) {
 }
 
 Filter.propTypes = {
+  currentFilter: PropTypes.string.isRequired,
   onFilterInputChange: PropTypes.func.isRequired,
 };
 

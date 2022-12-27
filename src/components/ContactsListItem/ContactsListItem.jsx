@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
-import { ListItem, Text } from './ContactsListItem.styled';
+import { ListItem, Text, Buttons } from './ContactsListItem.styled';
 import { Button } from 'components';
 import { theme } from '../../styles/theme';
 import { FaUserAlt, FaPhoneAlt } from 'react-icons/fa';
+import { MdAutorenew, MdOutlineDelete } from 'react-icons/md';
 
-function ContactsListItem({ id, name, number, deleteContact }) {
+function ContactsListItem({ id, name, number, deleteContact, showUpdateForm }) {
   return (
     <ListItem>
       <Text>
@@ -15,9 +16,16 @@ function ContactsListItem({ id, name, number, deleteContact }) {
         <FaPhoneAlt color={theme.colors.accent} size={theme.spacing(8)} />
         {number}
       </Text>
-      <Button type="button" onClick={() => deleteContact(id)}>
-        Delete contact
-      </Button>
+      <Buttons>
+        <Button type="button" onClick={() => deleteContact(id)}>
+          <MdOutlineDelete size={theme.spacing(6)} />
+          Delete
+        </Button>
+        <Button type="button" onClick={() => showUpdateForm(id)}>
+          <MdAutorenew size={theme.spacing(6)} />
+          Update
+        </Button>
+      </Buttons>
     </ListItem>
   );
 }
@@ -27,6 +35,7 @@ ContactsListItem.propTypes = {
   name: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,
   deleteContact: PropTypes.func.isRequired,
+  showUpdateForm: PropTypes.func.isRequired,
 };
 
 export default ContactsListItem;
