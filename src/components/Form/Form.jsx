@@ -14,12 +14,14 @@ export default function Form({ addNewContact, setIsModalOpen }) {
   }, []);
 
   const onInputChange = e => {
-    switch (e.target.name) {
+    const { name, value } = e.target;
+
+    switch (name) {
       case 'name':
-        setName(e.target.value);
+        setName(value);
         break;
       case 'number':
-        setNumber(e.target.value);
+        setNumber(value);
         break;
       default:
         return;
