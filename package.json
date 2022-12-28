@@ -8,6 +8,7 @@
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.1",
+    "framer-motion": "^8.0.2",
     "modern-normalize": "^1.1.0",
     "nanoid": "^4.0.0",
     "react": "^18.1.0",

@@ -17,13 +17,13 @@ function ContactsListItem({ id, name, number, deleteContact, showUpdateForm }) {
         {number}
       </Text>
       <Buttons>
-        <Button type="button" onClick={() => deleteContact(id)}>
-          <MdOutlineDelete size={theme.spacing(6)} />
-          Delete
-        </Button>
         <Button type="button" onClick={() => showUpdateForm(id)}>
           <MdAutorenew size={theme.spacing(6)} />
           Update
+        </Button>
+        <Button type="button" onClick={() => deleteContact(id)} red>
+          <MdOutlineDelete size={theme.spacing(6)} />
+          Delete
         </Button>
       </Buttons>
     </ListItem>

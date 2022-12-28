@@ -16,7 +16,7 @@ export const AddButton = styled.button`
   background-color: ${({ theme }) => theme.colors.accent};
   color: ${({ theme }) => theme.colors.white};
   border: none;
-  border-radius: 50%;
+  border-radius: ${({ theme }) => theme.spacing(2)};
   cursor: pointer;
   font-size: 18px;
 `;

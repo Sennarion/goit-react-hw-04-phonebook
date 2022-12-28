@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import { AnimatePresence, motion } from 'framer-motion';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyleComponent } from 'styles/GlobalStyles.styled';
@@ -142,21 +143,42 @@ export default function App() {
         </Container>
       </Section>
 
-      {isModalOpen && (
-        <Modal toggleModal={setIsModalOpen}>
-          <Form addNewContact={addNewContact} setIsModalOpen={setIsModalOpen} />
-        </Modal>
-      )}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+          >
+            <Modal toggleModal={setIsModalOpen} isModalOpen={isModalOpen}>
+              <Form
+                addNewContact={addNewContact}
+                setIsModalOpen={setIsModalOpen}
+              />
+            </Modal>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {userToUpdate && (
-        <Modal toggleModal={setUserToUpdate}>
-          <UpdateForm
-            updateContact={updateContact}
-            setUserToUpdate={setUserToUpdate}
-            userToUpdate={userToUpdate}
-          />
-        </Modal>
-      )}
+      <AnimatePresence>
+        {userToUpdate && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+          >
+            <Modal toggleModal={setUserToUpdate}>
+              <UpdateForm
+                updateContact={updateContact}
+                setUserToUpdate={setUserToUpdate}
+                userToUpdate={userToUpdate}
+              />
+            </Modal>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {isLoading && <Loader />}
       <GlobalStyleComponent />
