@@ -55,6 +55,7 @@ export default function UpdateForm({
           required
           onChange={onInputChange}
           value={name}
+          spellСheck="false"
         />
       </Label>
 
